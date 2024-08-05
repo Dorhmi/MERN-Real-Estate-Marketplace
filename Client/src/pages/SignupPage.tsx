@@ -30,6 +30,7 @@ export default function SignupPage() {
             if (data.success === false) {
                 setIsloading(false);
                 setError(data.message);
+                return;
             }
             setIsloading(false);
             setError(null);
