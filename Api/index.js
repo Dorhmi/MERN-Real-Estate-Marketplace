@@ -5,10 +5,12 @@ import UserRouter from "./routes/UserRoute.js";
 import AuthRouter from "./routes/AuthRoute.js";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const options = {
