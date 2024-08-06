@@ -7,14 +7,14 @@ export default function SignupPage() {
     const [isloading, setIsloading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
             ...userData,
             [e.target.id]: e.target.value,
         });
     };
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             setIsloading(true);
@@ -44,10 +44,15 @@ export default function SignupPage() {
     return (
         <div className="flex flex-col justify-center items-center gap-5 pt-16">
             <h2 className=" text-2xl font-bold text-[#12341e]">Sign Up</h2>
-            {error && <p> {error} </p>}
+            {error && (
+                <p className=" text-red-500 w-[250px] md:w-[400px]">
+                    {" "}
+                    {error}{" "}
+                </p>
+            )}
             <form
                 onSubmit={handleSubmit}
-                className=" md:w-[400px] flex flex-col gap-5"
+                className=" w-[250px] md:w-[400px] flex flex-col gap-5"
             >
                 <input
                     className=" bg-slate-200 p-2 rounded-lg"
