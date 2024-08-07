@@ -43,21 +43,6 @@ app.get("/", (req, res) => {
     res.send("Welcom");
 });
 
-/**
- * @swagger
- * components:
- *     schemas:
- *        User:
- *          type: object
- *          properties:
- *              username:
- *                   type: string
- *              email:
- *                   type: string
- *              password:
- *                   type: string
- */
-
 app.use("/api/user", UserRouter);
 app.use("/api/auth", AuthRouter);
 
