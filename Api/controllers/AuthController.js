@@ -1,6 +1,7 @@
 import User from "../models/UserModel.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/Error.js";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -26,8 +27,11 @@ export const signin = async (req, res, next) => {
             valideUser.password
         );
         if (!validePassword) return next(errorHandler(401, "Wrong Password!"));
+        const token = jwt.sign({ id: valideUser._id }, process.env.JWT_SECRET);
         const { password: pass, ...rest } = valideUser._doc;
-        res.status(200).json(rest);
+        res.cookie("access_token", token, { httpOnly: true })
+            .status(200)
+            .json(rest);
     } catch (error) {
         next(error);
     }
