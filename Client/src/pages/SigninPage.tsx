@@ -1,12 +1,18 @@
 // import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    signInFailure,
+    signInStart,
+    signInSuccess,
+} from "../../redux/user/UserSlice";
 
 export default function SignupPage() {
     const [userData, setUserData] = useState({});
-    const [isloading, setIsloading] = useState(false);
-    const [error, setError] = useState(null);
+    const { loading, error } = useSelector((state) => state.user);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserData({
             ...userData,
@@ -17,7 +23,7 @@ export default function SignupPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            setIsloading(true);
+            dispatch(signInStart());
             const res = await fetch("http://localhost:3000/api/auth/signin", {
                 method: "POST",
                 headers: {
@@ -27,16 +33,13 @@ export default function SignupPage() {
             });
             const data = await res.json();
             if (data.success === false) {
-                setIsloading(false);
-                setError(data.message);
+                dispatch(signInFailure(data.message));
                 return;
             }
-            setIsloading(false);
-            setError(null);
+            dispatch(signInSuccess(data));
             navigate("/");
         } catch (error) {
-            setIsloading(false);
-            setError(error.message);
+            dispatch(signInFailure(error.message));
         }
     };
 
@@ -68,11 +71,11 @@ export default function SignupPage() {
                     onChange={handleChange}
                 />
                 <button className=" bg-[#76bce8] text-white p-1.5 rounded-lg duration-[0.3s] hover:bg-[#639bbe]">
-                    {isloading ? "Loading..." : "Submit"}
+                    {loading ? "Loading..." : "Submit"}
                 </button>
             </form>
             <div className=" flex gap-2">
-                <p className=" tracking-wide">Have an account?</p>
+                <p className=" tracking-wide">Dont have an account?</p>
                 <Link to={"/signup"}>
                     <span className=" text-blue-600">Sign Up</span>
                 </Link>
